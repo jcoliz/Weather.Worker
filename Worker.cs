@@ -27,7 +27,7 @@ public partial class Worker : BackgroundService
         }
         catch (Exception ex)
         {
-            _logger.LogCritical(ex, "Failed");
+            logCriticalFail(ex);
         }
     }
 
@@ -40,16 +40,22 @@ public partial class Worker : BackgroundService
         try
         {
             var forecast = await client.ForecastAsync(NWSForecastOfficeId.SEW,124,69,stoppingToken);
-            var json = System.Text.Json.JsonSerializer.Serialize(forecast);
+            var json = System.Text.Json.JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
-            _logger.LogInformation("Forecast: OK {Forecast}",json);
+            logReceivedOk(json);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error");
+            logFail(ex);
         }
     }
 
-    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: OK", EventId = 1000)]
-    public partial void logOk([CallerMemberName] string? location = null);
+    [LoggerMessage(Level = LogLevel.Information, Message = "{Location}: Received OK {Result}", EventId = 1000)]
+    public partial void logReceivedOk(string result, [CallerMemberName] string? location = null);
+
+    [LoggerMessage(Level = LogLevel.Error, Message = "{Location}: Failed", EventId = 1008)]
+    public partial void logFail(Exception ex, [CallerMemberName] string? location = null);
+
+    [LoggerMessage(Level = LogLevel.Critical, Message = "{Location}: Critical Failure", EventId = 1009)]
+    public partial void logCriticalFail(Exception ex, [CallerMemberName] string? location = null);
 }
