@@ -7,24 +7,46 @@ public partial class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
 
+    private readonly GridpointClient client = new(new HttpClient());
+
     public Worker(ILogger<Worker> logger)
     {
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var client = new GridpointClient(new HttpClient());
+        try
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await FetchForecastAsync(stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogCritical(ex, "Failed");
+        }
+    }
 
-        while (!stoppingToken.IsCancellationRequested)
+    /// <summary>
+    /// Fetch forecast from Weather Service
+    /// </summary>
+    /// <param name="stoppingToken">Cancellation token</param>
+    private async Task FetchForecastAsync(CancellationToken stoppingToken)
+    {
+        try
         {
             var forecast = await client.ForecastAsync(NWSForecastOfficeId.SEW,124,69,stoppingToken);
             var json = System.Text.Json.JsonSerializer.Serialize(forecast);
 
-            _logger.LogInformation("Forecast: {Forecast}",json);
-
-            logOk();
-            await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+            _logger.LogInformation("Forecast: OK {Forecast}",json);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error");
         }
     }
 
