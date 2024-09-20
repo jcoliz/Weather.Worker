@@ -1,6 +1,6 @@
 {
   "runtime": "Net80",
-  "defaultVariables": null,
+  "defaultVariables": "OutputFile=.\\ApiClient.cs",
   "documentGenerator": {
     "fromDocument": {
       "url": "openapi.yaml",
@@ -93,7 +93,7 @@
       "templateDirectory": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "ApiClients.cs",
+      "output": "$(OutputFile)",
       "newLineBehavior": "Auto"
     }
   }
