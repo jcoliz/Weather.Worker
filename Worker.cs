@@ -1,16 +1,32 @@
 using System.Runtime.CompilerServices;
+using System.Text.Json;
+using Microsoft.Extensions.Options;
 using Weather.Worker.Api;
+using Weather.Worker.Options;
 
 namespace Weather.Worker;
 
 public partial class Worker : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    /// <summary>
+    /// API client to use to connect with weather service
+    /// </summary>
     private readonly GridpointClient _client;
 
-    public Worker(GridpointClient client, ILogger<Worker> logger)
+    /// <summary>
+    /// Options describing where we want the weather
+    /// </summary>
+    private readonly WeatherOptions _options;
+
+    /// <summary>
+    /// Where to log results
+    /// </summary>
+    private readonly ILogger<Worker> _logger;
+
+    public Worker(GridpointClient client, IOptions<WeatherOptions> options, ILogger<Worker> logger)
     {
         _client = client;
+        _options = options.Value;
         _logger = logger;
     }
 
@@ -39,8 +55,8 @@ public partial class Worker : BackgroundService
     {
         try
         {
-            var forecast = await _client.ForecastAsync(NWSForecastOfficeId.SEW,124,69,stoppingToken);
-            var json = System.Text.Json.JsonSerializer.Serialize(forecast.Properties.Periods.First());
+            var forecast = await _client.ForecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
+            var json = JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
             logReceivedOk(json);
         }
