@@ -11,7 +11,7 @@ public partial class Worker : BackgroundService
     /// <summary>
     /// API client to use to connect with weather service
     /// </summary>
-    private readonly GridpointClient _client;
+    private readonly WeatherClient _client;
 
     /// <summary>
     /// Options describing where we want the weather
@@ -23,7 +23,7 @@ public partial class Worker : BackgroundService
     /// </summary>
     private readonly ILogger<Worker> _logger;
 
-    public Worker(GridpointClient client, IOptions<WeatherOptions> options, ILogger<Worker> logger)
+    public Worker(WeatherClient client, IOptions<WeatherOptions> options, ILogger<Worker> logger)
     {
         _client = client;
         _options = options.Value;
@@ -55,7 +55,7 @@ public partial class Worker : BackgroundService
     {
         try
         {
-            var forecast = await _client.ForecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
+            var forecast = await _client.Gridpoint_forecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
             var json = JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
             logReceivedOk(json);

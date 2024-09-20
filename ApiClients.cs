@@ -25,7 +25,7 @@ namespace Weather.Worker.Api
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.1.0.0 (NJsonSchema v11.0.2.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class GridpointClient 
+    public partial class WeatherClient 
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -36,7 +36,7 @@ namespace Weather.Worker.Api
         private System.Text.Json.JsonSerializerOptions _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public GridpointClient(System.Net.Http.HttpClient httpClient)
+        public WeatherClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://api.weather.gov";
@@ -80,9 +80,9 @@ namespace Weather.Worker.Api
         /// <param name="y">Forecast grid Y coordinate</param>
         /// <returns>A forecast for a gridpoint.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GridpointForecastGeoJson> ForecastAsync(NWSForecastOfficeId wfo, int x, int y)
+        public virtual System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_forecastAsync(NWSForecastOfficeId wfo, int x, int y)
         {
-            return ForecastAsync(wfo, x, y, System.Threading.CancellationToken.None);
+            return Gridpoint_forecastAsync(wfo, x, y, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -94,7 +94,7 @@ namespace Weather.Worker.Api
         /// <param name="y">Forecast grid Y coordinate</param>
         /// <returns>A forecast for a gridpoint.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GridpointForecastGeoJson> ForecastAsync(NWSForecastOfficeId wfo, int x, int y, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_forecastAsync(NWSForecastOfficeId wfo, int x, int y, System.Threading.CancellationToken cancellationToken)
         {
             if (wfo == null)
                 throw new System.ArgumentNullException("wfo");
@@ -810,7 +810,7 @@ namespace Weather.Worker.Api
         /// </summary>
 
         [System.Text.Json.Serialization.JsonPropertyName("windGust")]
-        public QuantitativeValue? WindGust { get; set; } = default!;
+        public string? WindGust { get; set; } = default!;
 
         /// <summary>
         /// The prevailing direction of the wind for the period, using a 16-point compass.
