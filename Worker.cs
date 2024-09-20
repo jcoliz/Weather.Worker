@@ -12,29 +12,20 @@ namespace Weather.Worker;
 /// <remarks>
 /// Keeps everything running!
 /// </remarks>
-public partial class Worker : BackgroundService
+/// <param name="client">API client to use to connect with weather service</param>
+/// <param name="options">Options describing where we want the weather</param>
+/// <param name="logger">Where to log results</param>
+public partial class Worker(
+    WeatherClient client, 
+    IOptions<WeatherOptions> options, 
+    ILogger<Worker> logger
+    ) : BackgroundService
 {
-    /// <summary>
-    /// API client to use to connect with weather service
-    /// </summary>
-    private readonly WeatherClient _client;
-
-    /// <summary>
-    /// Options describing where we want the weather
-    /// </summary>
-    private readonly WeatherOptions _options;
-
     /// <summary>
     /// Where to log results
     /// </summary>
-    private readonly ILogger<Worker> _logger;
-
-    public Worker(WeatherClient client, IOptions<WeatherOptions> options, ILogger<Worker> logger)
-    {
-        _client = client;
-        _options = options.Value;
-        _logger = logger;
-    }
+    /// <seealso href="https://adamstorr.co.uk/blog/primary-constructor-and-logging-dont-mix/">
+    private readonly ILogger<Worker> _logger = logger;
 
     /// <inheritdoc/>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -44,7 +35,7 @@ public partial class Worker : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 await FetchForecastAsync(stoppingToken);
-                await Task.Delay(_options.Frequency, stoppingToken);
+                await Task.Delay(options.Value.Frequency, stoppingToken);
             }
         }
         catch (Exception ex)
@@ -61,7 +52,12 @@ public partial class Worker : BackgroundService
     {
         try
         {
-            var forecast = await _client.Gridpoint_ForecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
+            var forecast = await client.Gridpoint_ForecastAsync(
+                options.Value.Office, 
+                options.Value.GridX, 
+                options.Value.GridY, 
+                stoppingToken
+            );
             var json = JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
             logReceivedOk(json);
