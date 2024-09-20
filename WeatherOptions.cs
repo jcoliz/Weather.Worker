@@ -14,6 +14,7 @@ public record WeatherOptions
         get;
         init;
     }
+    = NWSForecastOfficeId.ABQ;
 
     /// <summary>
     /// Grid position X coordinate
@@ -30,4 +31,10 @@ public record WeatherOptions
         get;
         init;
     }
+
+    public TimeSpan Frequency {
+        get;
+        init;
+    } 
+    = TimeSpan.FromSeconds(5);
 }

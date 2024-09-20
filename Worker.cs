@@ -6,6 +6,12 @@ using Weather.Worker.Options;
 
 namespace Weather.Worker;
 
+/// <summary>
+/// Background worker service
+/// </summary>
+/// <remarks>
+/// Keeps everything running!
+/// </remarks>
 public partial class Worker : BackgroundService
 {
     /// <summary>
@@ -38,7 +44,7 @@ public partial class Worker : BackgroundService
             while (!stoppingToken.IsCancellationRequested)
             {
                 await FetchForecastAsync(stoppingToken);
-                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
+                await Task.Delay(_options.Frequency, stoppingToken);
             }
         }
         catch (Exception ex)
