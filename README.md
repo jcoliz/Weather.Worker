@@ -1,5 +1,8 @@
 # Weather Worker Sample
 
+[![Build](https://github.com/jcoliz/Weather.Worker/actions/workflows/build.yml/badge.svg)](https://github.com/jcoliz/Weather.Worker/actions/workflows/build.yml)
+
+
 This is a very simple sample demonstrating a [.NET Worker Service](https://learn.microsoft.com/en-us/dotnet/core/extensions/workers) connecting to the U.S. [National Weather Service API](https://www.weather.gov/documentation/services-web-api) to retrieve and log  forecasts.
 
 ## Configuration
