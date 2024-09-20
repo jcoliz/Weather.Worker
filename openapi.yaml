@@ -11,7 +11,7 @@ paths:
   '/gridpoints/{wfo}/{x},{y}/forecast':
     get:
       description: 'Returns a textual forecast for a 2.5km grid area'
-      operationId: gridpoint_forecast
+      operationId: Gridpoint_Forecast
       responses:
         200:
           $ref: '#/components/responses/GridpointForecast'

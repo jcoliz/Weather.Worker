@@ -55,7 +55,7 @@ public partial class Worker : BackgroundService
     {
         try
         {
-            var forecast = await _client.Gridpoint_forecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
+            var forecast = await _client.Gridpoint_ForecastAsync(_options.Office, _options.GridX, _options.GridY, stoppingToken);
             var json = JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
             logReceivedOk(json);

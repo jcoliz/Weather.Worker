@@ -80,9 +80,9 @@ namespace Weather.Worker.Api
         /// <param name="y">Forecast grid Y coordinate</param>
         /// <returns>A forecast for a gridpoint.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_forecastAsync(NWSForecastOfficeId wfo, int x, int y)
+        public virtual System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_ForecastAsync(NWSForecastOfficeId wfo, int x, int y)
         {
-            return Gridpoint_forecastAsync(wfo, x, y, System.Threading.CancellationToken.None);
+            return Gridpoint_ForecastAsync(wfo, x, y, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -94,7 +94,7 @@ namespace Weather.Worker.Api
         /// <param name="y">Forecast grid Y coordinate</param>
         /// <returns>A forecast for a gridpoint.</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_forecastAsync(NWSForecastOfficeId wfo, int x, int y, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GridpointForecastGeoJson> Gridpoint_ForecastAsync(NWSForecastOfficeId wfo, int x, int y, System.Threading.CancellationToken cancellationToken)
         {
             if (wfo == null)
                 throw new System.ArgumentNullException("wfo");
