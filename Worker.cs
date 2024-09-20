@@ -6,11 +6,11 @@ namespace Weather.Worker;
 public partial class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
+    private readonly GridpointClient _client;
 
-    private readonly GridpointClient client = new(new HttpClient());
-
-    public Worker(ILogger<Worker> logger)
+    public Worker(GridpointClient client, ILogger<Worker> logger)
     {
+        _client = client;
         _logger = logger;
     }
 
@@ -39,7 +39,7 @@ public partial class Worker : BackgroundService
     {
         try
         {
-            var forecast = await client.ForecastAsync(NWSForecastOfficeId.SEW,124,69,stoppingToken);
+            var forecast = await _client.ForecastAsync(NWSForecastOfficeId.SEW,124,69,stoppingToken);
             var json = System.Text.Json.JsonSerializer.Serialize(forecast.Properties.Periods.First());
 
             logReceivedOk(json);
